@@ -16,8 +16,13 @@
 body {
   background: #F8F8F8;
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  padding: 0;
+}
+
+.ant-table table {
+  border-collapse: collapse;
+}
+
+.ant-table-row-selected {
+  border-left: 3px solid #242edb;
 }

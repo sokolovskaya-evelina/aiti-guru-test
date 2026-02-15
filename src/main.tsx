@@ -28,6 +28,23 @@ createRoot(document.getElementById("root")!).render(
             Checkbox: {
               colorText: "#9C9C9C",
             },
+            Table: {
+              headerBg: "#FFFFFF",
+              headerColor: "#9C9C9C",
+              borderColor: "#EDEDED",
+              rowSelectedBg: "#FFFFFF",
+              rowSelectedHoverBg: "#EDEDED",
+              rowHoverBg: "#EDEDED",
+            },
+            Pagination: {
+              itemActiveBg: "#797FEA",
+              itemActiveColor: "#FFFFFF",
+              itemActiveColorHover: "#FFFFFF",
+              colorPrimaryBorder: "#797FEA",
+              colorText: "#9C9C9C",
+              colorPrimary: "#FFFFFF",
+              colorPrimaryHover: "#FFFFFF",
+            },
           },
         }}
       >

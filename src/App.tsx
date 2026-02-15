@@ -1,9 +1,9 @@
-import Auth from "@/pages/auth/Auth.tsx"
+import Products from "@/pages/products/Products.tsx"
 
 function App() {
   return (
     <>
-      <Auth />
+      <Products />
     </>
   )
 }
