@@ -1,12 +1,63 @@
-import { Button, Flex, Typography } from "antd"
+import { Button, Flex, notification, Typography } from "antd"
 import Header from "@/components/Header.tsx"
 import { PlusCircleOutlined, SyncOutlined } from "@ant-design/icons"
 import ProductsTable from "@/components/Table.tsx"
+import { useEffect, useMemo, useState } from "react"
+import { type Product, useGetProductsQuery, useSearchProductsQuery } from "@/api/products.api.ts"
+import type { SorterResult } from "antd/es/table/interface"
+import { useDebounce } from "@/utils/useDebounce.ts"
 
 const Products = () => {
+  const [api, contextHolder] = notification.useNotification()
+
+  const [searchValue, setSearchValue] = useState<string>("")
+  const [sortBy, setSortBy] = useState<SorterResult<keyof Product>["field"]>()
+  const [order, setOrder] = useState<SorterResult<"ascend" | "descend">["order"]>()
+  const [skip, setSkip] = useState<number>(0)
+
+  console.log(searchValue)
+
+  const {
+    data: productsData,
+    error: productsError,
+    isLoading: productsLoading,
+  } = useGetProductsQuery({
+    params: {
+      limit: 20,
+      skip,
+      sortBy: sortBy as keyof Product,
+      order: (order === "ascend" && "asc") || (order === "descend" && "desc") || undefined,
+    },
+  })
+
+  const searchParams = useMemo(() => {
+    return { params: { q: searchValue } }
+  }, [searchValue])
+  const debouncedRequest = useDebounce(searchParams)
+
+  const {
+    data: searchData,
+    error: searchError,
+    isLoading: searchLoading,
+  } = useSearchProductsQuery(debouncedRequest)
+
+  const showSearchResults = useMemo(() => {
+    return searchValue.length > 0
+  }, [searchValue])
+
+  useEffect(() => {
+    if (productsError && searchError) {
+      api.error({
+        title: "Упс, что-то пошло не так 😔",
+        description: "Попробуйте ещё раз",
+      })
+    }
+  }, [productsError, searchError])
+
   return (
     <Flex vertical gap="30px">
-      <Header />
+      {contextHolder}
+      <Header searchValue={searchValue} setSearchValue={setSearchValue} />
       <Flex vertical gap="40px" className="bg-white p-7.5">
         <Flex justify="space-between" align="center">
           <Typography.Title level={4} className="m-0">
@@ -21,7 +72,13 @@ const Products = () => {
             </Button>
           </Flex>
         </Flex>
-        <ProductsTable />
+        <ProductsTable
+          data={showSearchResults ? searchData : productsData}
+          isLoading={showSearchResults ? searchLoading : productsLoading}
+          setSkip={setSkip}
+          setSortBy={setSortBy}
+          setOrder={setOrder}
+        />
       </Flex>
     </Flex>
   )

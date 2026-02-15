@@ -10,7 +10,7 @@ export type Product = {
   rating: number
 }
 
-type ProductsOutput = {
+export type ProductsOutput = {
   products: Product[]
   limit: number
   skip: number
@@ -26,6 +26,12 @@ type ProductInput = {
   }
 }
 
+type ProductSearchInput = {
+  params?: {
+    q?: string
+  }
+}
+
 export const productsApi = rootApi.injectEndpoints({
   endpoints: build => ({
     getProducts: build.query<ProductsOutput, ProductInput>({
@@ -35,6 +41,13 @@ export const productsApi = rootApi.injectEndpoints({
         params,
       }),
     }),
+    searchProducts: build.query<ProductsOutput, ProductSearchInput>({
+      query: ({ params }) => ({
+        url: "/products/search",
+        method: "GET",
+        params,
+      }),
+    }),
   }),
 })
-export const { useGetProductsQuery } = productsApi
+export const { useGetProductsQuery, useSearchProductsQuery } = productsApi
