@@ -1,7 +1,11 @@
-import "./App.css"
+import Auth from "@/pages/auth/Auth.tsx"
 
 function App() {
-  return <div className="flex min-h-svh flex-col items-center justify-center">Hello World!</div>
+  return (
+    <>
+      <Auth />
+    </>
+  )
 }
 
 export default App
