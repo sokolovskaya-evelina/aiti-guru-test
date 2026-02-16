@@ -32,7 +32,7 @@ type ProductSearchInput = {
   }
 }
 
-export const productsApi = rootApi.injectEndpoints({
+export const productsApi = rootApi.enhanceEndpoints({ addTagTypes: ["Product"] }).injectEndpoints({
   endpoints: build => ({
     getProducts: build.query<ProductsOutput, ProductInput>({
       query: ({ params }) => ({
@@ -40,6 +40,7 @@ export const productsApi = rootApi.injectEndpoints({
         method: "GET",
         params,
       }),
+      providesTags: ["Product"],
     }),
     searchProducts: build.query<ProductsOutput, ProductSearchInput>({
       query: ({ params }) => ({
@@ -48,6 +49,18 @@ export const productsApi = rootApi.injectEndpoints({
         params,
       }),
     }),
+    addProduct: build.mutation<
+      Product,
+      Pick<Product, "title" | "description" | "brand" | "sku" | "rating" | "price">
+    >({
+      query: product => ({
+        url: "/products/add",
+        method: "POST",
+        body: product,
+      }),
+      invalidatesTags: () => ["Product"],
+    }),
   }),
 })
-export const { useGetProductsQuery, useSearchProductsQuery } = productsApi
+
+export const { useGetProductsQuery, useSearchProductsQuery, useAddProductMutation } = productsApi
