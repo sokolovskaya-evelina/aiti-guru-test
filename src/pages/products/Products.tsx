@@ -8,12 +8,14 @@ import type { SorterResult } from "antd/es/table/interface"
 import { useDebounce } from "@/utils/hooks/useDebounce.ts"
 import { skipToken } from "@reduxjs/toolkit/query"
 import { usePersistedState } from "@/utils/hooks/usePersistedState.ts"
+import AddProductModal from "@/components/AddProductModal.tsx"
 
 const Products = () => {
   const [api, contextHolder] = notification.useNotification()
 
-  const [searchValue, setSearchValue] = useState<string>("")
-  const [skip, setSkip] = useState<number>(0)
+  const [searchValue, setSearchValue] = useState("")
+  const [skip, setSkip] = useState(0)
+  const [modalIsOpen, setModalIsOpen] = useState(false)
 
   const [sortBy, setSortBy] = usePersistedState(
     "sortBy",
@@ -74,7 +76,11 @@ const Products = () => {
             <Button>
               <SyncOutlined />
             </Button>
-            <Button type="primary" icon={<PlusCircleOutlined />}>
+            <Button
+              type="primary"
+              icon={<PlusCircleOutlined />}
+              onClick={() => setModalIsOpen(true)}
+            >
               Добавить
             </Button>
           </Flex>
@@ -88,6 +94,7 @@ const Products = () => {
           sortBy={sortBy}
           order={order}
         />
+        <AddProductModal open={modalIsOpen} setOpen={setModalIsOpen} />
       </Flex>
     </Flex>
   )
