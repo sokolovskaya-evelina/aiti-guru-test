@@ -13,10 +13,20 @@ type Props = {
   setSortBy: (value: SorterResult<keyof Product>["field"]) => void
   setOrder: (value: SorterResult<"ascend" | "descend">["order"]) => void
   setSkip: (value: number) => void
+  sortBy?: SorterResult<keyof Product>["field"]
+  order?: SorterResult<"ascend" | "descend">["order"]
 }
 
-const ProductsTable: React.FC<Props> = ({ isLoading, data, setSortBy, setSkip, setOrder }) => {
-  const config = useMemo(() => tableConfig(), [])
+const ProductsTable: React.FC<Props> = ({
+  isLoading,
+  data,
+  setSortBy,
+  setSkip,
+  setOrder,
+  sortBy,
+  order,
+}) => {
+  const config = useMemo(() => tableConfig({ sortBy, order }), [sortBy, order])
 
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
 

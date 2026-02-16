@@ -2,8 +2,15 @@ import Typography from "antd/es/typography"
 import type { Product } from "@/api/products.api.ts"
 import { Button, Empty, Flex, type TableProps } from "antd"
 import { EllipsisOutlined, PlusOutlined } from "@ant-design/icons"
+import type { SorterResult } from "antd/es/table/interface"
 
-export function tableConfig(): NonNullable<Partial<TableProps<Product>>> {
+export function tableConfig({
+  sortBy,
+  order,
+}: {
+  sortBy?: SorterResult<keyof Product>["field"]
+  order?: SorterResult<"ascend" | "descend">["order"]
+}): NonNullable<Partial<TableProps<Product>>> {
   return {
     rowKey: product => product.id,
     columns: [
@@ -43,6 +50,7 @@ export function tableConfig(): NonNullable<Partial<TableProps<Product>>> {
         dataIndex: "rating",
         align: "center",
         sorter: true,
+        sortOrder: sortBy === "rating" ? order : undefined,
         render: value => (
           <Typography.Text>
             <Typography.Text type={value < 3 ? "danger" : undefined}>{value}</Typography.Text> / 5
@@ -54,6 +62,7 @@ export function tableConfig(): NonNullable<Partial<TableProps<Product>>> {
         dataIndex: "price",
         align: "center",
         sorter: true,
+        sortOrder: sortBy === "price" ? order : undefined,
         render: value => (
           <Typography.Text>
             {Math.trunc(value)}

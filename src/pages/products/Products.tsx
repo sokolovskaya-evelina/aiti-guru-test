@@ -5,17 +5,24 @@ import ProductsTable from "@/components/Table.tsx"
 import { useEffect, useMemo, useState } from "react"
 import { type Product, useGetProductsQuery, useSearchProductsQuery } from "@/api/products.api.ts"
 import type { SorterResult } from "antd/es/table/interface"
-import { useDebounce } from "@/utils/useDebounce.ts"
+import { useDebounce } from "@/utils/hooks/useDebounce.ts"
+import { skipToken } from "@reduxjs/toolkit/query"
+import { usePersistedState } from "@/utils/hooks/usePersistedState.ts"
 
 const Products = () => {
   const [api, contextHolder] = notification.useNotification()
 
   const [searchValue, setSearchValue] = useState<string>("")
-  const [sortBy, setSortBy] = useState<SorterResult<keyof Product>["field"]>()
-  const [order, setOrder] = useState<SorterResult<"ascend" | "descend">["order"]>()
   const [skip, setSkip] = useState<number>(0)
 
-  console.log(searchValue)
+  const [sortBy, setSortBy] = usePersistedState(
+    "sortBy",
+    undefined as SorterResult<keyof Product>["field"]
+  )
+  const [order, setOrder] = usePersistedState(
+    "order",
+    undefined as SorterResult<"ascend" | "descend">["order"]
+  )
 
   const {
     data: productsData,
@@ -39,7 +46,7 @@ const Products = () => {
     data: searchData,
     error: searchError,
     isLoading: searchLoading,
-  } = useSearchProductsQuery(debouncedRequest)
+  } = useSearchProductsQuery(searchValue.length > 0 ? debouncedRequest : skipToken)
 
   const showSearchResults = useMemo(() => {
     return searchValue.length > 0
@@ -78,6 +85,8 @@ const Products = () => {
           setSkip={setSkip}
           setSortBy={setSortBy}
           setOrder={setOrder}
+          sortBy={sortBy}
+          order={order}
         />
       </Flex>
     </Flex>
