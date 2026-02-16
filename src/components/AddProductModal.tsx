@@ -1,5 +1,5 @@
 import React from "react"
-import { Button, Form, Input, InputNumber, Modal, notification, Space } from "antd"
+import { Button, Flex, Form, Input, InputNumber, Modal, notification } from "antd"
 import { CloseOutlined } from "@ant-design/icons"
 import { useAddProductMutation } from "@/api/products.api.ts"
 
@@ -109,12 +109,12 @@ const AddProductModal: React.FC<Props> = ({ open, setOpen }) => {
           >
             <InputNumber controls={false} min={0} />
           </Form.Item>
-          <Space>
+          <Flex gap={5} justify="end">
             <Button onClick={handleCancel}>Отменить</Button>
             <Button type="primary" htmlType="submit">
               Добавить
             </Button>
-          </Space>
+          </Flex>
         </Form>
       </Modal>
     </>
