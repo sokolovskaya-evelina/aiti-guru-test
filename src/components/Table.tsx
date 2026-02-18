@@ -54,6 +54,7 @@ const ProductsTable: React.FC<Props> = ({
       loading={isLoading}
       dataSource={data?.products ?? []}
       onChange={handleTableChange}
+      scroll={{ x: "max-content" }}
       pagination={{
         size: "large",
         total: data?.total,
