@@ -1,4 +1,4 @@
-import { Button, Card, Checkbox, Divider, Flex, Form, Input, Typography } from "antd"
+import { Button, Card, Checkbox, Divider, Flex, Form, Input, notification, Typography } from "antd"
 import {
   CloseOutlined,
   EyeInvisibleOutlined,
@@ -22,21 +22,33 @@ const Auth = () => {
 
   const handleFinish = async () => {
     const values = form.getFieldsValue()
-    const res = await login({ username: values.username, password: values.password }).unwrap()
+    login({ username: values.username, password: values.password })
+      .unwrap()
+      .then(res => {
+        dispatch(setRemember(values.remember))
 
-    dispatch(setRemember(values.remember))
+        if (!values.remember) {
+          persistor.pause()
+          persistor.flush()
+          persistor.purge()
+          persistor.persist()
+        }
 
-    if (!values.remember) {
-      persistor.pause()
-      await persistor.flush()
-      await persistor.purge()
-      persistor.persist()
-    }
-
-    if (res.accessToken) {
-      navigate("/", { replace: true })
-    }
+        if (res.accessToken) {
+          navigate("/", { replace: true })
+        }
+      })
+      .catch(err =>
+        notification.error({
+          title: "Упс, что-то пошло не так 😔",
+          description:
+            err.data.message === "Invalid credentials"
+              ? "Неверные логин или пароль"
+              : "Попробуйте ещё раз",
+        })
+      )
   }
+
   return (
     <div className="w-screen">
       <Flex vertical align="center" justify="center" className="min-h-svh w-full">
