@@ -2,7 +2,7 @@
 
 ТЗ: https://docs.google.com/document/d/15Iq9gp4POgv7rw0-WFwSpIYmqS1IGBh0P0lYoNBwNbA/edit?tab=t.0
 
-Ссылка на деплой: https://aiti-guru-test-ane7oo1l6-sokolovskayaevelinas-projects.vercel.app/
+Ссылка на деплой: https://aiti-guru-test-fzqvb1lpm-sokolovskayaevelinas-projects.vercel.app
 
 **Логин/пароль:** emilys / emilyspass
 
